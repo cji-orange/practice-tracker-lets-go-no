@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practice Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Include Supabase JS library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <div id="app" class="container">
+        <!-- Sign Up View -->
+        <div id="signUpView" class="view">
+            <h2>Sign Up</h2>
+            <form id="signUpForm">
+                <input type="text" id="signUpFirstName" placeholder="First Name" required><br>
+                <input type="text" id="signUpLastName" placeholder="Last Name" required><br>
+                <input type="email" id="signUpEmail" placeholder="Email" required><br>
+                <input type="password" id="signUpPassword" placeholder="Password" required><br>
+                <label>Instruments:</label><br>
+                <div id="signUpInstruments">
+                    <!-- Instrument checkboxes will be loaded here -->
+                </div>
+                <button type="submit">Sign Up</button>
+            </form>
+            <p>Already have an account? <button id="showSignInBtn">Sign In</button></p>
+            <p id="signUpError" class="error-message hidden"></p>
+        </div>
+
+        <!-- Sign In View -->
+        <div id="signInView" class="view hidden">
+            <h2>Sign In</h2>
+            <form id="signInForm">
+                <input type="email" id="signInEmail" placeholder="Email" required><br>
+                <input type="password" id="signInPassword" placeholder="Password" required><br>
+                <button type="submit">Sign In</button>
+            </form>
+            <p>Don't have an account? <button id="showSignUpBtn">Sign Up</button></p>
+            <p id="signInError" class="error-message hidden"></p>
+        </div>
+
+        <!-- Dashboard View -->
+        <div id="dashboardView" class="view hidden">
+            <div id="userInfo">
+                <h2>Welcome, <span id="userFirstName"></span>!</h2>
+                <p>Email: <span id="userEmail"></span></p>
+                <button id="signOutBtn">Sign Out</button>
+            </div>
+
+            <h3>My Instruments</h3>
+            <ul id="userInstrumentsList">
+                <!-- User's instruments will be listed here -->
+            </ul>
+
+            <h3>Practice Summary (Last 7 Days)</h3>
+            <div id="practiceChartContainer">
+                 <!-- Chart will be rendered here -->
+                 <canvas id="practiceChart"></canvas>
+            </div>
+            <p>Average daily practice: <span id="avgPracticeTime"></span> minutes</p>
+
+
+            <h3>Recent Practice Sessions</h3>
+            <button id="showCreateSessionBtn">Create New Practice Session</button>
+            <div id="recentSessions">
+                <!-- Recent practice sessions will be displayed here -->
+            </div>
+             <p id="dashboardError" class="error-message hidden"></p>
+        </div>
+
+        <!-- Practice Session View -->
+        <div id="practiceSessionView" class="view hidden">
+            <h2>Create Practice Session</h2>
+             <button id="backToDashboardBtn">Back to Dashboard</button>
+             <form id="practiceSessionForm">
+                <label for="sessionInstrument">Instrument:</label>
+                <select id="sessionInstrument" required>
+                    <!-- User's instruments will populate this dropdown -->
+                </select><br>
+
+                <h3>Subsessions</h3>
+                 <p>Total Time for this session: <span id="totalSessionTime">0</span> minutes</p>
+                <button type="button" id="createSubsessionBtn">Create Subsession</button>
+                <div id="subsessionsContainer">
+                    <!-- Subsession creation cards will appear here -->
+                </div>
+                <hr>
+                <button type="button" id="savePracticeSessionBtn">Save Practice Session</button>
+            </form>
+            <p id="practiceSessionError" class="error-message hidden"></p>
+        </div>
+
+    </div>
+
+    <!-- Include Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html> 

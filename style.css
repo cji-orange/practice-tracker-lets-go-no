@@ -1,0 +1,127 @@
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Basic Styling - will be expanded */
+.container {
+    padding: 20px;
+}
+
+.hidden {
+    display: none;
+}
+
+button {
+    padding: 10px 15px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+input, select {
+    padding: 10px;
+    margin: 5px;
+    display: block; /* Make inputs stack vertically */
+    width: calc(100% - 22px); /* Adjust width considering padding */
+    max-width: 400px; /* Limit max width of inputs */
+}
+
+label {
+    display: block;
+    margin-top: 10px;
+}
+
+#signUpInstruments label {
+    display: inline-block; /* Display instrument checkboxes inline */
+    margin-right: 15px;
+}
+#signUpInstruments input[type="checkbox"] {
+    display: inline-block;
+    width: auto;
+    margin-right: 5px;
+}
+
+.view {
+    margin-bottom: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.error-message {
+    color: red;
+    margin-top: 10px;
+}
+
+#practiceChartContainer {
+    max-width: 600px;
+    margin: 20px 0;
+}
+
+#subsessionsContainer .subsession-card {
+    border: 1px dashed #eee;
+    padding: 15px;
+    margin-top: 15px;
+    border-radius: 5px;
+}
+
+.subsession-card h4 {
+    margin-top: 0;
+}
+
+.subsession-tabs button {
+    background-color: #eee;
+    border: 1px solid #ccc;
+    border-bottom: none;
+    padding: 8px 12px;
+}
+
+.subsession-tabs button.active {
+    background-color: #fff;
+    border-bottom: 1px solid #fff;
+}
+
+.subsession-pane {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-top: -1px; /* Connect pane border to tabs */
+}
+
+.stopwatch-time {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+#recentSessions .session-card {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
+
+#recentSessions .session-card h4 {
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+
+#recentSessions .subsession-details {
+     margin-left: 20px;
+     font-size: 0.9em;
+     color: #555;
+}
+
+ul#userInstrumentsList {
+    list-style: none;
+    padding: 0;
+}
+ul#userInstrumentsList li {
+    background-color: #f0f0f0;
+    padding: 5px 10px;
+    margin: 3px 0;
+    border-radius: 3px;
+    display: inline-block;
+    margin-right: 5px;
+} 
