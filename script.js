@@ -28,6 +28,16 @@ let currentSubsessions = [];
 let practiceChartInstance = null;
 
 document.addEventListener('DOMContentLoaded', async () => {
+    // Explicitly check if Supabase library is loaded *before* anything else
+    console.log('DOMContentLoaded fired. Checking window.supabase...');
+    if (typeof window.supabase === 'undefined' || typeof window.supabase.createClient !== 'function') {
+        console.error('CRITICAL: Supabase library (supabase-js) not found on window object immediately after DOMContentLoaded.');
+        app.innerHTML = `<h2>Error Initializing Application</h2><p>The Supabase JavaScript library failed to load. Please check your network connection, browser console, and the Supabase CDN link in index.html.</p>`;
+        return; // Stop execution if library isn't loaded
+    } else {
+        console.log('Supabase library found on window object.');
+    }
+
     console.log('Practice Tracker App Initializing...');
 
     // Get DOM Elements
@@ -85,6 +95,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     showSignInBtn.addEventListener('click', () => showView('signInView'));
     showSignUpBtn.addEventListener('click', () => showView('signUpView'));
 
+    // Call the async initialization function after a tiny delay
+    setTimeout(initializeApp, 0);
+
+});
+
+// --- Initialization Function ---
+async function initializeApp() {
+    console.log('Attempting Supabase initialization inside initializeApp...');
     // Initialize Supabase
     try {
         const response = await fetch('/api/get-supabase-config');
@@ -97,25 +115,34 @@ document.addEventListener('DOMContentLoaded', async () => {
              throw new Error('Supabase config missing from server response.');
         }
 
-        supabase = supabase.createClient(config.supabaseUrl, config.supabaseAnonKey);
+        // Assign the initialized client instance to our local variable using the verified global object
+        supabase = window.supabase.createClient(config.supabaseUrl, config.supabaseAnonKey);
+
         console.log('Supabase client initialized.');
 
         // Setup Event Listeners
         setupEventListeners();
 
         // Setup Auth State Listener
-        supabase.auth.onAuthStateChange(handleAuthStateChange);
+        if (supabase && supabase.auth) {
+            supabase.auth.onAuthStateChange(handleAuthStateChange);
+        } else {
+             throw new Error('Supabase client not available for auth listener setup.');
+        }
 
         // Check initial session
-        const { data: { session } } = await supabase.auth.getSession();
-        handleAuthStateChange('INITIAL_SESSION', session);
+        if (supabase && supabase.auth) {
+            const { data: { session } } = await supabase.auth.getSession();
+            handleAuthStateChange('INITIAL_SESSION', session);
+        } else {
+            throw new Error('Supabase client not available for initial session check.');
+        }
 
     } catch (error) {
         console.error('Error initializing Supabase:', error);
-        app.innerHTML = `<h2>Error Initializing Application</h2><p>Could not connect to the backend services. Please ensure the Supabase URL and Key are correctly configured in your environment variables and the serverless function is working. Error: ${error.message}</p>`;
+        app.innerHTML = `<h2>Error Initializing Application</h2><p>Could not initialize the Supabase client. Please check the browser console for details. Make sure the Supabase library loaded correctly and the API configuration is available. Error: ${escapeHtml(error.message)}</p>`;
     }
-
-});
+}
 
 // --- Helper Functions ---
 
