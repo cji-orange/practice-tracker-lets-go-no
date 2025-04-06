@@ -236,7 +236,7 @@ async function handleSignUp(event) {
             console.log('Sign up successful, user:', data.user);
             // Auth state change listener will handle showing the dashboard
              // Optional: Show a success message or confirmation needed message if email verification is on
-            alert('Sign up successful! Please check your email for verification if enabled.');
+            alert('Sign up successful!');
             // No need to manually switch view, onAuthStateChange will handle it
         } else {
              displayError('signUpError', 'Sign up failed. Please try again.');

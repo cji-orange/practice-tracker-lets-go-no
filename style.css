@@ -1,127 +1,523 @@
-body {
-    font-family: sans-serif;
-    margin: 0;
-    padding: 0;
+:root {
+    --primary-color: #007bff; /* Vibrant Blue */
+    --secondary-color: #6c757d; /* Gray */
+    --light-bg: #f8f9fa;
+    --white: #ffffff;
+    --dark-text: #343a40;
+    --light-text: #6c757d;
+    --border-color: #dee2e6;
+    --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    --input-focus-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    --error-color: #dc3545; /* Red */
+    --success-color: #28a745; /* Green */
+    --teal-accent: #17a2b8; /* Teal Accent */
+    --font-family-sans-serif: 'Poppins', sans-serif;
+}
+
+html {
     box-sizing: border-box;
 }
 
-/* Basic Styling - will be expanded */
-.container {
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+body {
+    font-family: var(--font-family-sans-serif);
+    margin: 0;
+    padding: 0;
+    background-color: var(--light-bg);
+    color: var(--dark-text);
+    line-height: 1.6;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
     padding: 20px;
 }
 
+#app {
+    width: 100%;
+    max-width: 900px; /* Max width for larger screens */
+    background-color: var(--white);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.container { /* Keep container for potential future use, but #app handles main styling now */
+    padding: 0; /* Reset padding */
+}
+
+/* --- Utility Classes --- */
 .hidden {
-    display: none;
+    display: none !important; /* Use important to override potential conflicts */
+}
+
+.error-message {
+    color: var(--error-color);
+    margin-top: 10px;
+    font-size: 0.9em;
+    font-weight: 600;
+}
+
+/* --- Global Element Styles --- */
+h2, h3, h4 {
+    color: var(--dark-text);
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+h2 {
+    font-size: 1.75rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+h3 {
+    font-size: 1.4rem;
+    color: var(--primary-color);
+}
+
+h4 {
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
 }
 
 button {
-    padding: 10px 15px;
-    margin: 5px;
+    display: inline-block;
+    font-weight: 600;
+    color: var(--white);
+    text-align: center;
+    vertical-align: middle;
     cursor: pointer;
+    background-color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    padding: 0.6rem 1.2rem;
+    font-size: 1rem;
+    border-radius: 0.3rem;
+    transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    margin: 5px;
 }
 
-input, select {
-    padding: 10px;
-    margin: 5px;
-    display: block; /* Make inputs stack vertically */
-    width: calc(100% - 22px); /* Adjust width considering padding */
-    max-width: 400px; /* Limit max width of inputs */
+button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    border-color: #0056b3;
+}
+
+button:focus {
+    outline: 0;
+    box-shadow: var(--input-focus-shadow);
+}
+
+button:disabled {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+/* Secondary button style */
+button.secondary,
+button#showSignUpBtn,
+button#showSignInBtn {
+    color: var(--primary-color);
+    background-color: transparent;
+    border-color: var(--primary-color);
+}
+
+button.secondary:hover,
+button#showSignUpBtn:hover,
+button#showSignInBtn:hover {
+    color: var(--white);
+    background-color: var(--primary-color);
+}
+
+/* Small utility button */
+button.remove-subsession-btn {
+    background-color: transparent;
+    border: none;
+    color: var(--secondary-color);
+    padding: 0.2rem 0.5rem;
+    font-size: 1.2rem; /* Make X larger */
+    line-height: 1;
+    float: right;
+    margin: -5px 0 5px 5px; /* Adjust position */
+}
+button.remove-subsession-btn:hover {
+    color: var(--error-color);
+}
+button.remove-subsession-btn:disabled {
+    opacity: 0.4;
+}
+
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+select,
+textarea {
+    display: block;
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--dark-text);
+    background-color: var(--white);
+    background-clip: padding-box;
+    border: 1px solid var(--border-color);
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    margin-bottom: 1rem; /* Add space below inputs */
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--primary-color);
+    outline: 0;
+    box-shadow: var(--input-focus-shadow);
 }
 
 label {
-    display: block;
-    margin-top: 10px;
+    display: inline-block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid var(--border-color);
+    margin: 1.5rem 0;
+}
+
+p {
+    margin-bottom: 1rem;
+}
+
+ul {
+    padding-left: 20px;
+}
+
+/* --- View Styles --- */
+.view {
+    margin-bottom: 20px;
+    padding: 0; /* Reset padding, handled by #app */
+    border: none; /* Remove default border */
+    border-radius: 0;
+}
+
+/* Specific tweaks for Auth views */
+#signUpView, #signInView {
+    max-width: 450px; /* Limit width of auth forms */
+    margin: 0 auto; /* Center the auth forms */
 }
 
 #signUpInstruments label {
-    display: inline-block; /* Display instrument checkboxes inline */
+    display: inline-block;
     margin-right: 15px;
+    font-weight: 400; /* Normal weight for checkbox labels */
+    margin-bottom: 0.5rem;
 }
 #signUpInstruments input[type="checkbox"] {
     display: inline-block;
     width: auto;
     margin-right: 5px;
+    vertical-align: middle;
 }
 
-.view {
-    margin-bottom: 20px;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+/* --- Dashboard Styles --- */
+#userInfo {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
 }
-
-.error-message {
-    color: red;
-    margin-top: 10px;
+#userInfo h2 {
+    border: none;
+    margin-bottom: 0.5rem;
 }
-
-#practiceChartContainer {
-    max-width: 600px;
-    margin: 20px 0;
-}
-
-#subsessionsContainer .subsession-card {
-    border: 1px dashed #eee;
-    padding: 15px;
-    margin-top: 15px;
-    border-radius: 5px;
-}
-
-.subsession-card h4 {
-    margin-top: 0;
-}
-
-.subsession-tabs button {
-    background-color: #eee;
-    border: 1px solid #ccc;
-    border-bottom: none;
-    padding: 8px 12px;
-}
-
-.subsession-tabs button.active {
-    background-color: #fff;
-    border-bottom: 1px solid #fff;
-}
-
-.subsession-pane {
-    border: 1px solid #ccc;
-    padding: 15px;
-    margin-top: -1px; /* Connect pane border to tabs */
-}
-
-.stopwatch-time {
-    font-size: 1.5em;
-    font-weight: bold;
-    margin: 10px 0;
-}
-
-#recentSessions .session-card {
-    border: 1px solid #ddd;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 4px;
-}
-
-#recentSessions .session-card h4 {
-    margin-top: 0;
-    margin-bottom: 5px;
-}
-
-#recentSessions .subsession-details {
-     margin-left: 20px;
-     font-size: 0.9em;
-     color: #555;
+#userInfo p {
+    color: var(--light-text);
+    margin-bottom: 1rem;
 }
 
 ul#userInstrumentsList {
     list-style: none;
     padding: 0;
+    margin-bottom: 2rem;
 }
 ul#userInstrumentsList li {
-    background-color: #f0f0f0;
-    padding: 5px 10px;
-    margin: 3px 0;
-    border-radius: 3px;
+    background-color: var(--teal-accent); /* Use accent color */
+    color: var(--white);
+    padding: 6px 12px;
+    margin: 0 8px 8px 0; /* Add bottom margin */
+    border-radius: 15px; /* Pill shape */
     display: inline-block;
-    margin-right: 5px;
+    font-size: 0.9em;
+    font-weight: 600;
+}
+
+#practiceChartContainer {
+    max-width: 100%; /* Allow chart to take full width */
+    height: 300px; /* Give chart container a fixed height */
+    margin: 20px 0;
+    padding: 15px;
+    background-color: #f8f9fa; /* Slightly different background */
+    border-radius: 8px;
+}
+#practiceChart {
+    max-height: 100%;
+}
+
+#dashboardView > p { /* Styling for Avg Practice Time */
+    font-weight: 600;
+    font-size: 1.1em;
+}
+#dashboardView > p > span {
+    color: var(--primary-color);
+}
+
+
+#recentSessions {
+    margin-top: 1rem;
+}
+
+#recentSessions .session-card {
+    background-color: var(--white);
+    border: 1px solid var(--border-color);
+    padding: 15px 20px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: var(--card-shadow);
+    transition: box-shadow 0.2s ease-in-out;
+}
+#recentSessions .session-card:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+}
+
+#recentSessions .session-card h4 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    color: var(--primary-color);
+}
+#recentSessions .session-card p {
+    margin-bottom: 8px; /* Adjust spacing */
+    font-size: 0.95em;
+}
+
+#recentSessions .subsession-details {
+     margin-left: 0; /* Remove default indent */
+     margin-top: 10px;
+     padding-top: 10px;
+     border-top: 1px dashed var(--border-color);
+     font-size: 0.9em;
+     color: var(--light-text);
+     list-style: none; /* Remove bullets */
+     padding-left: 0;
+}
+#recentSessions .subsession-details li {
+    margin-bottom: 5px;
+}
+#recentSessions .subsession-details strong {
+    color: var(--dark-text);
+}
+
+/* --- Practice Session View Styles --- */
+#practiceSessionView h3 {
+    margin-top: 2rem;
+}
+
+#subsessionsContainer .subsession-card {
+    border: 1px solid var(--border-color); /* Solid border */
+    background-color: var(--white);
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 8px;
+    box-shadow: var(--card-shadow);
+}
+
+.subsession-card h4 {
+    margin-top: 0;
+    font-size: 1.2rem;
+}
+
+.subsession-tabs {
+    margin-top: 1rem;
+    margin-bottom: 0; /* Remove space below tabs */
+    border-bottom: 1px solid var(--border-color);
+}
+
+.subsession-tabs button {
+    background-color: transparent;
+    color: var(--secondary-color);
+    border: none;
+    border-bottom: 3px solid transparent; /* Space for active border */
+    border-radius: 0;
+    padding: 0.6rem 1rem;
+    margin: 0 5px -1px 0; /* Align with bottom border */
+    font-weight: 600;
+    transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.subsession-tabs button.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+}
+.subsession-tabs button:hover:not(.active) {
+    color: var(--dark-text);
+    background: transparent; /* Ensure no background on hover */
+}
+
+.subsession-pane {
+    border: none; /* Remove border */
+    padding: 20px 0 0 0; /* Add padding top, remove others */
+    margin-top: 0;
+}
+
+.stopwatch-time {
+    font-size: 2.5em; /* Larger time display */
+    font-weight: 300; /* Lighter font weight */
+    color: var(--primary-color);
+    margin: 10px 0 20px 0;
+    text-align: center;
+}
+
+.subsession-pane label {
+    font-size: 0.9em;
+    color: var(--light-text);
+}
+
+.subsession-pane textarea {
+    min-height: 60px;
+}
+
+.subsession-pane button {
+    margin-top: 10px;
+}
+.subsession-pane button.stopwatch-start-btn {
+    background-color: var(--success-color);
+    border-color: var(--success-color);
+}
+.subsession-pane button.stopwatch-start-btn:hover {
+    background-color: #218838; /* Darker Green */
+    border-color: #218838;
+}
+.subsession-pane button.stopwatch-stop-btn {
+    background-color: var(--error-color);
+    border-color: var(--error-color);
+}
+.subsession-pane button.stopwatch-stop-btn:hover {
+     background-color: #c82333; /* Darker Red */
+     border-color: #c82333;
+}
+.subsession-pane button.stopwatch-reset-btn {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+.subsession-pane button.stopwatch-reset-btn:hover {
+     background-color: #5a6268; /* Darker Gray */
+     border-color: #5a6268;
+}
+
+.subsession-status {
+    font-style: italic;
+    color: var(--success-color);
+    margin-left: 10px;
+    font-weight: 600;
+}
+
+/* --- Responsive Design --- */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    #app {
+        padding: 20px;
+    }
+    h2 {
+        font-size: 1.5rem;
+    }
+    h3 {
+        font-size: 1.25rem;
+    }
+    button {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="number"],
+    select,
+    textarea {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.9rem;
+    }
+    #practiceChartContainer {
+        height: 250px; /* Slightly smaller chart on mobile */
+        padding: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 5px;
+        display: block; /* Allow body scrolling on very small screens if needed */
+    }
+    #app {
+        padding: 15px;
+        margin: 10px auto; /* Add slight margin */
+        border-radius: 8px;
+    }
+    h2 {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+    }
+    h3 {
+        font-size: 1.1rem;
+    }
+    button {
+        width: 100%; /* Make buttons full width */
+        margin-left: 0;
+        margin-right: 0;
+    }
+    button.remove-subsession-btn {
+        width: auto; /* Keep remove button small */
+        font-size: 1rem;
+        margin-top: 0;
+    }
+
+    /* Stack stopwatch buttons vertically */
+    #practiceSessionView .subsession-pane button {
+         display: block;
+         width: 100%;
+         margin-bottom: 8px;
+    }
+
+    ul#userInstrumentsList li {
+        font-size: 0.8em;
+        padding: 4px 8px;
+        margin-right: 5px;
+        margin-bottom: 5px;
+    }
+
+    #recentSessions .session-card {
+        padding: 15px;
+    }
+    #recentSessions .session-card h4 {
+        font-size: 1rem;
+    }
+
+    .subsession-tabs button {
+        padding: 0.5rem 0.7rem;
+        font-size: 0.9rem;
+    }
+    .stopwatch-time {
+        font-size: 2em;
+    }
 } 
