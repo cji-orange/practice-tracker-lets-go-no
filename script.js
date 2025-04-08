@@ -443,7 +443,7 @@ const updatePracticeChart = async () => {
 
         // Get user's daily practice times
         const { data: userData, error } = await supabase
-            .from('auth.users')
+            .from('users')
             .select('minutes_practiced_today, minutes_practiced_yesterday, minutes_practiced_2_days_ago, minutes_practiced_3_days_ago, minutes_practiced_4_days_ago, minutes_practiced_5_days_ago, minutes_practiced_6_days_ago')
             .eq('id', user.id)
             .single();
@@ -742,7 +742,7 @@ const savePracticeSession = async (sessionData) => {
 
         // Update today's practice time
         const { error: updateError } = await supabase
-            .from('auth.users')
+            .from('users')
             .update({ 
                 minutes_practiced_today: supabase.rpc('increment', { 
                     column: 'minutes_practiced_today', 
