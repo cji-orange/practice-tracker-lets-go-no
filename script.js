@@ -356,16 +356,23 @@ function setupEventListeners() {
              return;
          }
 
-         // Construct the sessionData object
+         // Construct the sessionData object - ADD MAPPING HERE
          const sessionData = {
              instrument: selectedInstrument,
-             subsessions: submittedSubsessions // Pass the array of submitted subsessions
+             // Map submitted subsessions to the structure expected by savePracticeSession
+             subsessions: submittedSubsessions.map(sub => ({
+                 category: sub.category,
+                 duration: sub.minutes, // Map 'minutes' to 'duration'
+                 notes: sub.notes
+                 // Include other properties if needed by savePracticeSession's JSONB storage
+             }))
          };
 
          try {
              console.log("Attempting to save session:", sessionData);
-             await savePracticeSession(sessionData); // Call the actual save function with data
+             await savePracticeSession(sessionData); // Call the actual save function with mapped data
              alert('Practice session saved successfully!');
+             currentSubsessions = []; // Clear local state after successful save
              clearPracticeSessionView();
              showView('dashboardView');
              loadDashboard(); // Reload dashboard to show updated data
