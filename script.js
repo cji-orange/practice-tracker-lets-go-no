@@ -346,7 +346,7 @@ function loadDashboard() {
     userEmailSpan.textContent = currentUser.email;
     displayUserInstruments(currentUser.user_metadata?.instruments || []);
     loadRecentSessions(); // Needs implementation
-    loadPracticeChart(); // Needs implementation
+    updatePracticeChart(); // Updated to use the new function name
 }
 
 // Placeholder for displaying instruments
