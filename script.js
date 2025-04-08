@@ -338,15 +338,47 @@ function setupEventListeners() {
 }
 
 // Placeholder for dashboard loading function
-function loadDashboard() {
+async function loadDashboard() {
     if (!currentUser) return;
     console.log('Loading dashboard for user:', currentUser.id);
-    // TODO: Implement actual data fetching and UI updates
+
+    // --- Ensure user row exists in public.users --- START
+    try {
+        const { data: existingUser, error: fetchError } = await supabase
+            .from('users')
+            .select('id') // Select only id to check existence
+            .eq('id', currentUser.id)
+            .maybeSingle(); // Use maybeSingle() which returns null if no row, instead of erroring
+
+        if (fetchError) {
+            // Handle potential errors fetching the user row, but don't block dashboard load
+            console.error("Error checking for user profile:", fetchError);
+        } else if (!existingUser) {
+            // User row doesn't exist, let's create it
+            console.log(`No profile found for user ${currentUser.id}. Creating one.`);
+            const { error: insertError } = await supabase
+                .from('users')
+                .insert({ id: currentUser.id }); // Insert only the id, defaults will apply
+
+            if (insertError) {
+                console.error("Error creating user profile:", insertError);
+                // Optionally display an error to the user
+                displayError('dashboardError', 'Could not initialize user profile. Some features might not work.');
+            } else {
+                console.log(`User profile created for ${currentUser.id}`);
+            }
+        }
+    } catch (err) {
+        // Catch any unexpected errors during the profile check/creation
+        console.error("Unexpected error during user profile check/creation:", err);
+    }
+    // --- Ensure user row exists in public.users --- END
+
     userFirstNameSpan.textContent = currentUser.user_metadata?.first_name || 'User';
     userEmailSpan.textContent = currentUser.email;
     displayUserInstruments(currentUser.user_metadata?.instruments || []);
     loadRecentSessions(); // Needs implementation
-    updatePracticeChart(); // Updated to use the new function name
+    updatePracticeChart(); // Now this should find the user row
 }
 
 // Placeholder for displaying instruments
