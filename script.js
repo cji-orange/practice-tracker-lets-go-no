@@ -745,9 +745,10 @@ function createSubsessionCard() {
                 category: category,
                 minutes: minutes,
                 notes: notes,
-                submitted: false
+                submitted: true
             };
 
+            // Disable fields after submission
             categorySelect.disabled = true;
             tabButtons.forEach(btn => btn.disabled = true);
             startBtn.disabled = true;
@@ -757,7 +758,7 @@ function createSubsessionCard() {
             notesFields.forEach(field => field.disabled = true);
             submitBtns.forEach(btn => btn.disabled = true);
             statusSpans.forEach(span => span.textContent = ' Submitted');
-            removeBtn.disabled = true;
+            removeBtn.disabled = true; // Disable remove after submitting locally
 
              addOrUpdateLocalSubsession(subsessionData);
         });
