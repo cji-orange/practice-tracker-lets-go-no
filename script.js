@@ -747,6 +747,7 @@ function createSubsessionCard() {
                 notes: notes,
                 submitted: true
             };
+            console.log("Subsession data created on submit:", subsessionData);
 
             // Disable fields after submission
             categorySelect.disabled = true;
