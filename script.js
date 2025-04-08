@@ -436,18 +436,14 @@ async function loadRecentSessions() {
     }
 }
 
-async function loadPracticeChart() {
-    if (!currentUser) return;
-    clearError('dashboardError');
-    avgPracticeTimeSpan.textContent = 'Loading...';
-
+const updatePracticeChart = async () => {
     try {
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) throw new Error('User not authenticated');
 
         // Get user's daily practice times
         const { data: userData, error } = await supabase
-            .from('users')
+            .from('auth.users')
             .select('minutes_practiced_today, minutes_practiced_yesterday, minutes_practiced_2_days_ago, minutes_practiced_3_days_ago, minutes_practiced_4_days_ago, minutes_practiced_5_days_ago, minutes_practiced_6_days_ago')
             .eq('id', user.id)
             .single();
@@ -469,7 +465,7 @@ async function loadPracticeChart() {
         // Calculate average
         const totalMinutes = data.reduce((sum, minutes) => sum + minutes, 0);
         const averageMinutes = Math.round(totalMinutes / 7);
-        avgPracticeTimeSpan.textContent = averageMinutes;
+        document.getElementById('avgPracticeTime').textContent = averageMinutes;
 
         // Update or create chart
         const ctx = document.getElementById('practiceChart').getContext('2d');
@@ -505,7 +501,7 @@ async function loadPracticeChart() {
     } catch (error) {
         console.error('Error updating practice chart:', error);
     }
-}
+};
 
 // Placeholder functions for Practice Session View
 function startNewPracticeSession() {
@@ -746,7 +742,7 @@ const savePracticeSession = async (sessionData) => {
 
         // Update today's practice time
         const { error: updateError } = await supabase
-            .from('users')
+            .from('auth.users')
             .update({ 
                 minutes_practiced_today: supabase.rpc('increment', { 
                     column: 'minutes_practiced_today', 
